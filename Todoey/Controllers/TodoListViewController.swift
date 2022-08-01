@@ -88,22 +88,22 @@ extension TodoListViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
+        items = items?.filter("title CONTAINS %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
+        
+        tableView.reloadData()
+        
         searchBar.resignFirstResponder()
     }
     
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        if searchText == "" {
-//            loadItems()
-//
-//        } else {
-//            let request: NSFetchRequest<Item> = Item.fetchRequest()
-//
-//            let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchText)
-//            request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//
-//            loadItems()
-//        }
-//    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count == 0 {
+            loadItems()
+
+        } else {
+            items = items?.filter("title CONTAINS %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
+            tableView.reloadData()
+        }
+    }
 }
 
 
@@ -126,6 +126,7 @@ extension TodoListViewController {
                     try self.realm.write {
                         let newItem = Item()
                         newItem.title = itemName
+                        newItem.dateCreated = Date.now
                         currentCategory.items.append(newItem)
                     }
                 } catch {
