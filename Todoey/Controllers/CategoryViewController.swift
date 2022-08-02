@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: SwipeTableViewController {
     
     let realm = try! Realm()
     
@@ -16,10 +16,51 @@ class CategoryViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Rows of Table Views
+        tableView.rowHeight = 80.0
 
         loadCategories()
     }
-
+    
+    //MARK: - Data Manipulations Methods
+    
+    func save(category: Category) {
+        
+        do {
+            try realm.write {
+                realm.add(category)
+            }
+        } catch {
+            print("Error: \(error)")
+        }
+       
+        tableView.reloadData()
+    }
+    
+    func loadCategories() {
+        
+        categories = realm.objects(Category.self)
+        
+        tableView.reloadData()
+        
+    }
+    
+    // Delete item from swipe
+    override func updateModel(at indexPath: IndexPath) {
+        if let categoryToDelete = self.categories?[indexPath.row] {
+            
+            do {
+                try realm.write {
+                    realm.delete(categoryToDelete)
+                }
+            } catch {
+                print("Error with category deletion: \(error)")
+            }
+            
+            // tableView.reloadData()
+        }
+    }
 }
 
 //MARK: - TableView Delegate
@@ -53,7 +94,8 @@ extension CategoryViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
+        
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         var content = cell.defaultContentConfiguration()
         content.text = categories?[indexPath.row].name ?? "No categories added"
@@ -61,6 +103,12 @@ extension CategoryViewController {
         
         return cell
     }
+}
+
+
+//MARK: - SwipeTableView Delegate
+extension CategoryViewController {
+
 }
 
 //MARK: - IBActions
@@ -90,31 +138,4 @@ extension CategoryViewController {
         
         present(alert, animated: true)
     }
-}
-
-
-//MARK: - Data Manipulations Methods
-extension CategoryViewController {
-    
-    func save(category: Category) {
-        
-        do {
-            try realm.write {
-                realm.add(category)
-            }
-        } catch {
-            print("Error: \(error)")
-        }
-       
-        tableView.reloadData()
-    }
-    
-    func loadCategories() {
-        
-        categories = realm.objects(Category.self)
-        
-        tableView.reloadData()
-        
-    }
-    
 }
