@@ -48,6 +48,7 @@ class CategoryViewController: SwipeTableViewController {
     
     // Delete item from swipe
     override func updateModel(at indexPath: IndexPath) {
+        
         if let categoryToDelete = self.categories?[indexPath.row] {
             
             do {
@@ -103,12 +104,6 @@ extension CategoryViewController {
         
         return cell
     }
-}
-
-
-//MARK: - SwipeTableView Delegate
-extension CategoryViewController {
-
 }
 
 //MARK: - IBActions

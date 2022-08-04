@@ -47,7 +47,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         return options
     }
     
-    //MARK: - Update
+    //MARK: - Update Model
     func updateModel(at indexPath: IndexPath) {
         
     }

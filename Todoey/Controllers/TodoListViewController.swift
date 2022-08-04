@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class TodoListViewController: UITableViewController {
+class TodoListViewController: SwipeTableViewController {
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -29,7 +29,30 @@ class TodoListViewController: UITableViewController {
             self.navigationController?.navigationBar.tintColor = UIColor.white
         }
         
+        tableView.rowHeight = 50.0
+        
         searchBar.delegate = self
+    }
+    
+    
+    //MARK: - Model Manipulation Methods
+    func loadItems() {
+        
+        items = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
+        
+        tableView.reloadData()
+    }
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let item = self.items?[indexPath.row] {
+            do {
+                try self.realm.write {
+                    self.realm.delete(item)
+                }
+            } catch {
+                print("Error deleting item: \(error)")
+            }
+        }
     }
     
 }
@@ -43,7 +66,7 @@ extension TodoListViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let item = items?[indexPath.row] {
             cell.textLabel!.text = item.title
@@ -52,7 +75,6 @@ extension TodoListViewController {
         } else {
             cell.textLabel!.text = "No items added yet"
         }
-        
         
         return cell
     }
@@ -110,7 +132,7 @@ extension TodoListViewController: UISearchBarDelegate {
 // MARK: - IBActions
 extension TodoListViewController {
 
-    // Add Buttom on the Navigation Bar
+    // Add Button on the Navigation Bar
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
         var textField = UITextField()
@@ -148,16 +170,3 @@ extension TodoListViewController {
     }
 }
 
-
-//MARK: - Model Manipulation Methods
-
-extension TodoListViewController {
-
-    func loadItems() {
-        
-        items = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
-        
-        tableView.reloadData()
-    }
-    
-}
