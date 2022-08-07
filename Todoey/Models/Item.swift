@@ -14,7 +14,5 @@ class Item: Object {
     @Persisted var isDone: Bool = false
     @Persisted var dateCreated: Date
     
-    @Persisted var backgroundColor: String
-    
     @Persisted(originProperty: "items") var parentCategory: LinkingObjects<Category>
 }

@@ -26,15 +26,42 @@ class TodoListViewController: SwipeTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        DispatchQueue.main.async {
-            self.view.tintColor = .white
-            self.navigationController?.navigationBar.tintColor = .white
-        }
-        
-        tableView.rowHeight = 60.0
+        tableView.rowHeight = 70.0
         tableView.separatorStyle = .none
         
         searchBar.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        guard let selectedCategory = selectedCategory
+        else { return }
+        
+        guard let navigationBar = navigationController?.navigationBar
+        else { fatalError("Navigation Bar does not exist.") }
+        
+        title = selectedCategory.name
+        
+        DispatchQueue.main.async {
+            let categoryColor = UIColor(hexString: selectedCategory.backgroundColor)
+            let textAdjustableColor = categoryColor.isLight() ? UIColor.black : UIColor.white
+            
+            // View
+            self.view.backgroundColor = categoryColor.darkened(amount: 0.1)
+            
+            // Navigation Bar
+            navigationBar.tintColor = textAdjustableColor
+            navigationBar.barTintColor = categoryColor.darkened(amount: 0.3)
+            navigationBar.backgroundColor = categoryColor.darkened(amount: 0.1)
+            navigationBar.largeTitleTextAttributes = [
+                NSAttributedString.Key.foregroundColor: textAdjustableColor
+            ]
+        }
+
+        // Search Bar
+        searchBar.placeholder = "Search"
+        searchBar.searchTextField.backgroundColor = .white
+        searchBar.tintColor = .black
     }
     
     
@@ -73,7 +100,7 @@ extension TodoListViewController {
         
         if let item = items?[indexPath.row] {
             
-            let cellColor = DynamicColor(hexString: item.backgroundColor).darkened(amount: Double(indexPath.row) / Double(5 * items!.count))
+            let cellColor = DynamicColor(hexString: selectedCategory!.backgroundColor).darkened(amount: CGFloat(indexPath.row) / CGFloat(2 * items!.count))
             
             // Text Label
             cell.textLabel!.text = item.title
@@ -164,7 +191,6 @@ extension TodoListViewController {
                         let newItem = Item()
                         newItem.title = itemName
                         newItem.dateCreated = Date.now
-                        newItem.backgroundColor = currentCategory.color
                         currentCategory.items.append(newItem)
                     }
                 } catch {

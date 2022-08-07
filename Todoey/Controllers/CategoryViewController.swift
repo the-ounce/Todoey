@@ -25,6 +25,27 @@ class CategoryViewController: SwipeTableViewController {
         loadCategories()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        guard let navigationBar = navigationController?.navigationBar
+        else { fatalError("Navigation Bar does not exist.") }
+        
+        DispatchQueue.main.async {
+            let menuColor = UIColor(hexString: "90A4AF")
+            
+            // View
+            self.view.backgroundColor = menuColor
+            
+            // Navigation Bar
+            navigationBar.tintColor = .black
+            navigationBar.barTintColor = menuColor.darkened(amount: 0.3)
+            navigationBar.backgroundColor = menuColor
+            navigationBar.largeTitleTextAttributes = [
+                NSAttributedString.Key.foregroundColor: UIColor.black
+            ]
+        }
+    }
+    
     //MARK: - Data Manipulations Methods
     
     func save(category: Category) {
@@ -71,9 +92,9 @@ class CategoryViewController: SwipeTableViewController {
 extension CategoryViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-     //   tableView.deselectRow(at: indexPath, animated: true)
-        
         performSegue(withIdentifier: "goToItems", sender: self)
+        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -101,7 +122,10 @@ extension CategoryViewController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let category = categories?[indexPath.row] {
-            cell.backgroundColor = DynamicColor(hexString: category.color)
+            
+            let backgroudColor = DynamicColor(hexString: category.backgroundColor)
+            
+            cell.backgroundColor = backgroudColor
 
         // Content Config
             var content = cell.defaultContentConfiguration()
@@ -114,6 +138,8 @@ extension CategoryViewController {
         
         return cell
     }
+    
+    
 }
 
 //MARK: - IBActions
@@ -135,7 +161,7 @@ extension CategoryViewController {
             
             let newCategory = Category()
             newCategory.name = textField.text!
-            newCategory.color = UIColor.random.toHexString()
+            newCategory.backgroundColor = UIColor.random.toHexString()
             
             self.save(category: newCategory)
         }
