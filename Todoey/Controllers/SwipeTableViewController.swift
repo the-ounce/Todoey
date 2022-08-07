@@ -36,6 +36,8 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         }
         // customize the action appearance
         deleteAction.image = UIImage(systemName: "trash")
+        deleteAction.textColor = .red
+        deleteAction.backgroundColor = .white
 
         return [deleteAction]
     }

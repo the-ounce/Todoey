@@ -11,6 +11,7 @@ import RealmSwift
 class Category: Object {
     
     @Persisted var name: String = ""
+    @Persisted var color: String = ""
     
     // Inverse Relationship
     @Persisted var items = List<Item>()

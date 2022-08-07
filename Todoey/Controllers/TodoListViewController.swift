@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import DynamicColor
 
 class TodoListViewController: SwipeTableViewController {
     
@@ -26,10 +27,12 @@ class TodoListViewController: SwipeTableViewController {
         super.viewDidLoad()
         
         DispatchQueue.main.async {
-            self.navigationController?.navigationBar.tintColor = UIColor.white
+            self.view.tintColor = .white
+            self.navigationController?.navigationBar.tintColor = .white
         }
         
-        tableView.rowHeight = 50.0
+        tableView.rowHeight = 60.0
+        tableView.separatorStyle = .none
         
         searchBar.delegate = self
     }
@@ -38,7 +41,7 @@ class TodoListViewController: SwipeTableViewController {
     //MARK: - Model Manipulation Methods
     func loadItems() {
         
-        items = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
+        items = selectedCategory?.items.sorted(byKeyPath: "dateCreated", ascending: true)
         
         tableView.reloadData()
     }
@@ -69,8 +72,18 @@ extension TodoListViewController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let item = items?[indexPath.row] {
-            cell.textLabel!.text = item.title
             
+            let cellColor = DynamicColor(hexString: item.backgroundColor).darkened(amount: Double(indexPath.row) / Double(5 * items!.count))
+            
+            // Text Label
+            cell.textLabel!.text = item.title
+            cell.textLabel!.textColor = cellColor.isLight() ? .black : .white
+            
+            // Background + Other
+            cell.backgroundColor = cellColor
+            cell.selectionStyle = .none
+            
+            // Accessory Type
             cell.accessoryType = item.isDone ? .checkmark : .none
         } else {
             cell.textLabel!.text = "No items added yet"
@@ -98,6 +111,7 @@ extension TodoListViewController {
                 print("Error updating isDone: \(error)")
             }
         }
+        
         
         tableView.deselectRow(at: indexPath, animated: true)
         tableView.reloadData()
@@ -150,6 +164,7 @@ extension TodoListViewController {
                         let newItem = Item()
                         newItem.title = itemName
                         newItem.dateCreated = Date.now
+                        newItem.backgroundColor = currentCategory.color
                         currentCategory.items.append(newItem)
                     }
                 } catch {

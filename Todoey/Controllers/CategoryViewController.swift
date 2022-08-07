@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import DynamicColor
 
 class CategoryViewController: SwipeTableViewController {
     
@@ -19,6 +20,7 @@ class CategoryViewController: SwipeTableViewController {
         
         // Rows of Table Views
         tableView.rowHeight = 80.0
+        tableView.separatorStyle = .none
 
         loadCategories()
     }
@@ -98,9 +100,17 @@ extension CategoryViewController {
         
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
-        var content = cell.defaultContentConfiguration()
-        content.text = categories?[indexPath.row].name ?? "No categories added"
-        cell.contentConfiguration = content
+        if let category = categories?[indexPath.row] {
+            cell.backgroundColor = DynamicColor(hexString: category.color)
+
+        // Content Config
+            var content = cell.defaultContentConfiguration()
+            // Text
+            content.text = category.name
+            content.textProperties.color = cell.backgroundColor!.isLight() ? .black : .white
+            
+            cell.contentConfiguration = content
+        }
         
         return cell
     }
@@ -125,6 +135,7 @@ extension CategoryViewController {
             
             let newCategory = Category()
             newCategory.name = textField.text!
+            newCategory.color = UIColor.random.toHexString()
             
             self.save(category: newCategory)
         }
