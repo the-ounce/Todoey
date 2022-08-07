@@ -19,7 +19,7 @@
 		55CB5248289574D800CEAD91 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CB5247289574D800CEAD91 /* Category.swift */; };
 		55CB524B2899263D00CEAD91 /* SwipeCellKit in Frameworks */ = {isa = PBXBuildFile; productRef = 55CB524A2899263D00CEAD91 /* SwipeCellKit */; };
 		55CB524D2899346800CEAD91 /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CB524C2899346800CEAD91 /* SwipeTableViewController.swift */; };
-		55CB5250289FC84800CEAD91 /* Hue in Frameworks */ = {isa = PBXBuildFile; productRef = 55CB524F289FC84800CEAD91 /* Hue */; };
+		55CB5253289FCDE500CEAD91 /* DynamicColor in Frameworks */ = {isa = PBXBuildFile; productRef = 55CB5252289FCDE500CEAD91 /* DynamicColor */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,8 +42,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55CB5250289FC84800CEAD91 /* Hue in Frameworks */,
 				55CB524B2899263D00CEAD91 /* SwipeCellKit in Frameworks */,
+				55CB5253289FCDE500CEAD91 /* DynamicColor in Frameworks */,
 				55CB52422895603500CEAD91 /* RealmSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,7 +136,7 @@
 			packageProductDependencies = (
 				55CB52412895603500CEAD91 /* RealmSwift */,
 				55CB524A2899263D00CEAD91 /* SwipeCellKit */,
-				55CB524F289FC84800CEAD91 /* Hue */,
+				55CB5252289FCDE500CEAD91 /* DynamicColor */,
 			);
 			productName = Todoey;
 			productReference = 554A8CE72890469C00A14B2E /* Todoey.app */;
@@ -169,7 +169,7 @@
 			packageReferences = (
 				55CB52402895603500CEAD91 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				55CB52492899263D00CEAD91 /* XCRemoteSwiftPackageReference "SwipeCellKit" */,
-				55CB524E289FC84800CEAD91 /* XCRemoteSwiftPackageReference "Hue" */,
+				55CB5251289FCDE500CEAD91 /* XCRemoteSwiftPackageReference "DynamicColor" */,
 			);
 			productRefGroup = 554A8CE82890469C00A14B2E /* Products */;
 			projectDirPath = "";
@@ -438,9 +438,9 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		55CB524E289FC84800CEAD91 /* XCRemoteSwiftPackageReference "Hue" */ = {
+		55CB5251289FCDE500CEAD91 /* XCRemoteSwiftPackageReference "DynamicColor" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/zenangst/Hue";
+			repositoryURL = "https://github.com/yannickl/DynamicColor";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.0.0;
@@ -459,10 +459,10 @@
 			package = 55CB52492899263D00CEAD91 /* XCRemoteSwiftPackageReference "SwipeCellKit" */;
 			productName = SwipeCellKit;
 		};
-		55CB524F289FC84800CEAD91 /* Hue */ = {
+		55CB5252289FCDE500CEAD91 /* DynamicColor */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 55CB524E289FC84800CEAD91 /* XCRemoteSwiftPackageReference "Hue" */;
-			productName = Hue;
+			package = 55CB5251289FCDE500CEAD91 /* XCRemoteSwiftPackageReference "DynamicColor" */;
+			productName = DynamicColor;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
